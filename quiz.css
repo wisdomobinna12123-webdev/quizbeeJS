@@ -1,0 +1,1041 @@
+/* ============================================================
+   Quizbee — Tech Minimal UI (Soft Dark)
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+/* ============ Reset ============ */
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ============ Tokens ============ */
+:root {
+    /* Soft dark surfaces */
+    --bg-0: #171a21;
+    --bg-1: #1b1f28;
+    --surface: #222732;
+    --surface-2: #2a303c;
+    --surface-3: #333a48;
+
+    /* Lines */
+    --line: #2c3241;
+    --line-2: #3a4150;
+
+    /* Text */
+    --text: #7f889c;
+    --text-2: #a4adc0;
+    --text-strong: #eaedf3;
+    --text-dim: #5f6578;
+
+    /* Accent */
+    --accent: #7089f0;
+    --accent-bright: #8ea2ff;
+    --accent-dim: rgba(112, 137, 240, 0.12);
+    --accent-line: rgba(112, 137, 240, 0.30);
+    --accent-glow: rgba(112, 137, 240, 0.35);
+
+    /* States */
+    --correct: #3ecf7e;
+    --correct-dim: rgba(62, 207, 126, 0.10);
+    --wrong: #f06e6e;
+    --wrong-dim: rgba(240, 110, 110, 0.10);
+
+    /* Spacing */
+    --xs: 4px;
+    --sm: 8px;
+    --md: 12px;
+    --xd: 16px;
+    --lg: 24px;
+    --xl: 26px;
+
+    /* Radii */
+    --radius: 14px;
+    --radius-sm: 10px;
+
+    /* Motion */
+    --ease: 0.25s cubic-bezier(0.15, 0.30, 0.15, 1);
+
+    /* Fonts */
+    --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+    --sans: 'Inter', system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+/* ============ App shell ============ */
+body {
+    min-height: 100vh;
+    min-height: 100dvh;
+
+    display: flex;
+    flex-direction: column;
+
+    font-family: var(--sans);
+    font-size: 15px;
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+
+    background-color: var(--bg-0);
+    background-image:
+        radial-gradient(700px 500px at 85% 0%, rgba(112, 137, 240, 0.09), transparent 60%),
+        radial-gradient(600px 500px at 5% 100%, rgba(112, 137, 240, 0.05), transparent 60%);
+    background-attachment: fixed;
+}
+
+/* ============ Container ============ */
+.quiz-container {
+    position: relative;
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--xd);
+
+    width: 100%;
+    padding: var(--lg) var(--xd);
+    padding-bottom: calc(var(--lg) + env(safe-area-inset-bottom, 0px));
+
+    background: linear-gradient(180deg, var(--surface) 0%, var(--bg-1) 100%);
+
+    animation: rise 0.5s var(--ease) both;
+}
+
+@keyframes rise {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: none; }
+}
+
+/* ============ Header ============ */
+.quiz-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--md);
+
+    padding-bottom: var(--md);
+    border-bottom: 1px solid var(--line);
+}
+
+.quiz-header h2 {
+    display: flex;
+    align-items: center;
+
+    font-family: var(--mono);
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-strong);
+}
+
+.quiz-header h2::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    margin-right: 9px;
+
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--accent-glow);
+}
+
+.points {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 5px;
+
+    padding: 4px 11px;
+
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+
+    background: var(--accent-dim);
+    border: 1px solid var(--accent-line);
+    border-radius: 999px;
+}
+
+.points .score {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--accent-bright);
+    font-variant-numeric: tabular-nums;
+}
+
+.points p {
+    font-size: 0.58rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+}
+
+/* ============ Progress label ============ */
+.range {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+}
+
+.range .id {
+    color: var(--accent-bright);
+    font-weight: 700;
+}
+
+/* ============ Questions ============ */
+.questions {
+    display: flex;
+    flex-direction: column;
+}
+
+.question {
+    margin-top: var(--sm);
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+    color: var(--text-strong);
+}
+
+/* ============ Options ============ */
+.options {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin: var(--lg) 0;
+}
+
+.option-btn {
+    position: relative;
+    overflow: hidden;
+
+    padding: 14px 16px;
+    text-align: left;
+
+    font-family: var(--sans);
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--text-2);
+
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+
+    cursor: pointer;
+    transition:
+        color var(--ease),
+        background var(--ease),
+        border-color var(--ease),
+        transform var(--ease),
+        box-shadow var(--ease);
+}
+
+.option-btn::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 2px;
+    height: 0;
+
+    background: var(--accent);
+    border-radius: 0 2px 2px 0;
+
+    transform: translateY(-50%);
+    transition: height var(--ease);
+}
+
+.option-btn:hover {
+    color: var(--text-strong);
+    background: var(--surface-3);
+    border-color: var(--line-2);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 22px -18px rgba(0, 0, 0, 0.8);
+}
+
+.option-btn:hover::before {
+    height: 55%;
+}
+
+.option-btn:active {
+    transform: translateY(0);
+}
+
+.option-btn:focus-visible {
+    outline: none;
+    border-color: var(--accent-line);
+    box-shadow: 0 0 0 3px var(--accent-dim);
+}
+
+/* Correct */
+.option-btn.correct {
+    color: #c9f0d7;
+    background: linear-gradient(180deg, var(--correct-dim), transparent);
+    border-color: rgba(62, 207, 126, 0.45);
+}
+
+.option-btn.correct::before {
+    top: 0;
+    height: 100%;
+    transform: none;
+    background: var(--correct);
+}
+
+.option-btn.correct::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    right: 14px;
+    transform: translateY(-50%);
+
+    font-family: var(--mono);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--correct);
+}
+
+/* Wrong */
+.option-btn.wrong {
+    color: #f5c5c5;
+    background: linear-gradient(180deg, var(--wrong-dim), transparent);
+    border-color: rgba(240, 110, 110, 0.45);
+}
+
+.option-btn.wrong::before {
+    top: 0;
+    height: 100%;
+    transform: none;
+    background: var(--wrong);
+}
+
+.option-btn.wrong::after {
+    content: '✕';
+    position: absolute;
+    top: 50%;
+    right: 14px;
+    transform: translateY(-50%);
+
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--wrong);
+}
+
+/* ============ Navigation ============ */
+.navigation-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding-top: var(--md);
+    border-top: 1px solid var(--line);
+}
+
+.prev,
+.next,
+.reset {
+    width: 46px;
+    height: 46px;
+
+    display: grid;
+    place-items: center;
+
+    font-size: 0.85rem;
+    color: var(--text-2);
+
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+
+    cursor: pointer;
+    transition:
+        color var(--ease),
+        background var(--ease),
+        border-color var(--ease),
+        transform var(--ease),
+        box-shadow var(--ease);
+}
+
+.prev:hover,
+.next:hover,
+.reset:hover {
+    color: var(--text-strong);
+    background: var(--surface-3);
+    border-color: var(--line-2);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -16px rgba(0, 0, 0, 0.9);
+}
+
+.prev:active,
+.next:active,
+.reset:active{
+    transform: translateY(0);
+}
+
+.prev:focus-visible,
+.next:focus-visible,
+.reset:focus-visible{
+    outline: none;
+    border-color: var(--accent-line);
+    box-shadow: 0 0 0 3px var(--accent-dim);
+}
+
+.next.active {
+    color: #fff;
+    background: var(--accent);
+    border-color: var(--accent);
+    box-shadow: 0 10px 22px -14px var(--accent-glow);
+}
+
+.next.active:hover {
+    background: var(--accent-bright);
+    border-color: var(--accent-bright);
+}
+
+.prev:disabled,
+.reset:disabled {
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+/* ============ Feedback ============ */
+.description {
+    margin-top: auto;
+    padding: var(--md);
+
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    line-height: 1.6;
+    color: var(--text);
+
+    background: var(--surface-2);
+    border-left: 2px solid var(--accent);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+
+
+/* ============================================================
+   Welcome Modal
+   ============================================================ */
+
+.welcome-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+
+    display: grid;
+    place-items: center;
+    padding: var(--xd, 16px);
+
+    font-family: var(--sans, system-ui, sans-serif);
+}
+
+.welcome-modal[hidden] {
+    display: none;
+}
+
+/* ---------- Backdrop ---------- */
+.welcome-backdrop {
+    position: absolute;
+    inset: 0;
+
+    background: rgba(10, 12, 18, 0.72);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    animation: welcomeFade 0.3s ease both;
+}
+
+@keyframes welcomeFade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+/* ---------- Card ---------- */
+.welcome-card {
+    position: relative;
+    z-index: 1;
+
+    width: min(100%, 400px);
+    max-height: calc(100dvh - 32px);
+    overflow-y: auto;
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--md, 12px);
+
+    padding: 26px 22px 20px;
+
+    background: linear-gradient(180deg,
+        var(--surface, #222732) 0%,
+        var(--bg-1, #1b1f28) 100%);
+
+    border: 1px solid var(--line, #2c3241);
+    border-radius: var(--radius, 14px);
+
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.02) inset,
+        0 40px 80px -30px rgba(0, 0, 0, 0.85);
+
+    animation: welcomeRise 0.45s cubic-bezier(0.15, 0.30, 0.15, 1) both;
+}
+
+/* Hairline accent across the top */
+.welcome-card::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: 22px;
+    right: 22px;
+    height: 1px;
+
+    background: linear-gradient(90deg,
+        transparent,
+        var(--accent-line, rgba(112, 137, 240, 0.30)),
+        transparent);
+
+    pointer-events: none;
+}
+
+@keyframes welcomeRise {
+    from { opacity: 0; transform: translateY(16px) scale(0.97); }
+    to   { opacity: 1; transform: none; }
+}
+
+/* ---------- Close button ---------- */
+.welcome-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+
+    width: 32px;
+    height: 32px;
+
+    display: grid;
+    place-items: center;
+
+    font-size: 0.8rem;
+    color: var(--text-dim, #5f6578);
+
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    cursor: pointer;
+
+    transition:
+        color 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.welcome-close:hover {
+    color: var(--text-strong, #eaedf3);
+    background: var(--surface-2, #2a303c);
+    border-color: var(--line, #2c3241);
+}
+
+.welcome-close:focus-visible {
+    outline: none;
+    border-color: var(--accent-line, rgba(112, 137, 240, 0.30));
+    box-shadow: 0 0 0 3px var(--accent-dim, rgba(112, 137, 240, 0.12));
+}
+
+/* ---------- Badge ---------- */
+.welcome-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    align-self: flex-start;
+
+    padding: 4px 10px;
+
+    font-family: var(--mono, monospace);
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-dim, #5f6578);
+
+    background: var(--accent-dim, rgba(112, 137, 240, 0.12));
+    border: 1px solid var(--accent-line, rgba(112, 137, 240, 0.30));
+    border-radius: 999px;
+}
+
+.welcome-badge-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+
+    background: var(--correct, #3ecf7e);
+    box-shadow: 0 0 8px var(--correct, #3ecf7e);
+
+    animation: welcomePulse 2s ease-out infinite;
+}
+
+@keyframes welcomePulse {
+    0%   { box-shadow: 0 0 0 0 rgba(62, 207, 126, 0.5); }
+    70%  { box-shadow: 0 0 0 8px rgba(62, 207, 126, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(62, 207, 126, 0); }
+}
+
+/* ---------- Title ---------- */
+.welcome-title {
+    margin-top: var(--sm, 8px);
+
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--text-strong, #eaedf3);
+}
+
+.welcome-title span {
+    color: var(--accent-bright, #8ea2ff);
+}
+
+/* ---------- Body text ---------- */
+.welcome-text {
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: var(--text, #7f889c);
+}
+
+/* ---------- Feature list ---------- */
+.welcome-list {
+    list-style: none;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    margin: var(--sm, 8px) 0 var(--xs, 4px);
+}
+
+.welcome-list li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    font-size: 0.82rem;
+    line-height: 1.4;
+    color: var(--text-2, #a4adc0);
+}
+
+.welcome-num {
+    flex-shrink: 0;
+
+    display: grid;
+    place-items: center;
+
+    width: 26px;
+    height: 26px;
+
+    font-family: var(--mono, monospace);
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+
+    color: var(--accent-bright, #8ea2ff);
+    background: var(--surface-2, #2a303c);
+    border: 1px solid var(--line, #2c3241);
+    border-radius: 8px;
+}
+
+/* ---------- CTA ---------- */
+.welcome-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    width: 100%;
+    margin-top: var(--sm, 8px);
+    padding: 14px 18px;
+
+    font-family: var(--sans, system-ui, sans-serif);
+    font-size: 0.88rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: #fff;
+
+    background: var(--accent, #7089f0);
+    border: 1px solid var(--accent, #7089f0);
+    border-radius: var(--radius-sm, 10px);
+    cursor: pointer;
+
+    box-shadow: 0 14px 28px -16px var(--accent-glow, rgba(112, 137, 240, 0.35));
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s cubic-bezier(0.15, 0.30, 0.15, 1),
+        box-shadow 0.2s ease;
+}
+
+.welcome-cta i {
+    font-size: 0.78rem;
+    transition: transform 0.2s ease;
+}
+
+.welcome-cta:hover {
+    background: var(--accent-bright, #8ea2ff);
+    border-color: var(--accent-bright, #8ea2ff);
+    transform: translateY(-2px);
+    box-shadow: 0 18px 32px -16px var(--accent-glow, rgba(112, 137, 240, 0.35));
+}
+
+.welcome-cta:hover i {
+    transform: translateX(3px);
+}
+
+.welcome-cta:active {
+    transform: translateY(0);
+}
+
+.welcome-cta:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--accent-dim, rgba(112, 137, 240, 0.12));
+}
+
+/* ---------- Skip checkbox ---------- */
+.welcome-skip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    margin-top: var(--xs, 4px);
+
+    font-size: 0.72rem;
+    color: var(--text-dim, #5f6578);
+
+    cursor: pointer;
+    user-select: none;
+}
+
+.welcome-skip input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.welcome-check {
+    position: relative;
+    flex-shrink: 0;
+
+    width: 16px;
+    height: 16px;
+
+    background: var(--surface-2, #2a303c);
+    border: 1px solid var(--line-2, #3a4150);
+    border-radius: 5px;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.welcome-check::after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 2px;
+
+    width: 4px;
+    height: 8px;
+
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+
+    transform: rotate(45deg) scale(0);
+    transition: transform 0.2s cubic-bezier(0.15, 0.30, 0.15, 1);
+}
+
+.welcome-skip input:checked + .welcome-check {
+    background: var(--accent, #7089f0);
+    border-color: var(--accent, #7089f0);
+}
+
+.welcome-skip input:checked + .welcome-check::after {
+    transform: rotate(45deg) scale(1);
+}
+
+.welcome-skip input:focus-visible + .welcome-check {
+    box-shadow: 0 0 0 3px var(--accent-dim, rgba(112, 137, 240, 0.12));
+}
+
+.welcome-skip:hover {
+    color: var(--text-2, #a4adc0);
+}
+
+/* ---------- Slim scrollbar inside card ---------- */
+.welcome-card::-webkit-scrollbar { width: 6px; }
+.welcome-card::-webkit-scrollbar-track { background: transparent; }
+.welcome-card::-webkit-scrollbar-thumb {
+    background: var(--line-2, #3a4150);
+    border-radius: 999px;
+}
+.welcome-card {
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-2, #3a4150) transparent;
+}
+
+/* ============================================================
+   Responsive — very small screens (280px – 340px)
+   ============================================================ */
+@media (max-width: 340px) {
+    .welcome-modal {
+        padding: var(--sm, 8px);
+    }
+
+    .welcome-card {
+        gap: var(--sm, 8px);
+        padding: 20px 14px 16px;
+        border-radius: var(--radius-sm, 10px);
+    }
+
+    .welcome-close {
+        top: 10px;
+        right: 10px;
+        width: 28px;
+        height: 28px;
+        font-size: 0.7rem;
+    }
+
+    .welcome-badge {
+        font-size: 0.54rem;
+        letter-spacing: 0.12em;
+        padding: 3px 8px;
+    }
+
+    .welcome-title {
+        font-size: 1.1rem;
+    }
+
+    .welcome-text {
+        font-size: 0.76rem;
+        line-height: 1.5;
+    }
+
+    .welcome-list {
+        gap: 8px;
+    }
+
+    .welcome-list li {
+        gap: 9px;
+        font-size: 0.74rem;
+    }
+
+    .welcome-num {
+        width: 22px;
+        height: 22px;
+        font-size: 0.56rem;
+        border-radius: 6px;
+    }
+
+    .welcome-cta {
+        padding: 12px 14px;
+        font-size: 0.8rem;
+    }
+
+    .welcome-skip {
+        font-size: 0.66rem;
+    }
+
+    .welcome-check {
+        width: 14px;
+        height: 14px;
+    }
+
+    .welcome-check::after {
+        left: 4px;
+        top: 1px;
+        width: 4px;
+        height: 7px;
+    }
+}
+
+/* ============================================================
+   Reduced motion
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+    .welcome-backdrop,
+    .welcome-card,
+    .welcome-badge-dot {
+        animation: none !important;
+    }
+}
+
+
+
+
+
+
+
+/* ============================================================
+   Tier 1 — Very small screens (280px – 340px)
+   ============================================================ */
+@media (max-width: 340px) {
+    .quiz-container {
+        padding: var(--xd) var(--sm);
+        padding-bottom: calc(var(--md) + env(safe-area-inset-bottom, 0px));
+        gap: var(--sm);
+    }
+
+    .quiz-header {
+        padding-bottom: var(--sm);
+    }
+
+    .quiz-header h2 {
+        font-size: 0.72rem;
+        letter-spacing: 0.10em;
+    }
+
+    .quiz-header h2::before {
+        width: 6px;
+        height: 6px;
+        margin-right: 7px;
+    }
+
+    .points {
+        padding: 3px 8px;
+        gap: 4px;
+    }
+
+    .points .score {
+        font-size: 0.72rem;
+    }
+
+    .points p {
+        font-size: 0.52rem;
+        letter-spacing: 0.12em;
+    }
+
+    .range {
+        font-size: 0.58rem;
+        letter-spacing: 0.14em;
+    }
+
+    .question {
+        font-size: 0.92rem;
+        line-height: 1.4;
+    }
+
+    .options {
+        gap: 7px;
+        margin: var(--md) 0;
+    }
+
+    .option-btn {
+        padding: 11px 12px;
+        font-size: 0.78rem;
+    }
+
+    .option-btn.correct::after,
+    .option-btn.wrong::after {
+        right: 10px;
+        font-size: 0.75rem;
+    }
+
+    .navigation-btn {
+        padding-top: var(--sm);
+    }
+
+    .prev,
+    .next {
+        width: 40px;
+        height: 40px;
+        font-size: 0.72rem;
+    }
+
+    .description {
+        padding: var(--sm);
+        font-size: 0.62rem;
+        line-height: 1.5;
+        
+    }
+}
+
+/* ============================================================
+   Tier 2 — Tablet & desktop: card layout
+   ============================================================ */
+@media (min-width: 560px) {
+    body {
+        display: grid;
+        place-items: center;
+        padding: var(--lg);
+    }
+
+    .quiz-container {
+        flex: initial;
+        width: min(100%, 480px);
+        max-height: calc(100dvh - 48px);
+        overflow-y: auto;
+        padding: var(--lg);
+
+        background: linear-gradient(180deg, var(--surface) 0%, var(--bg-1) 100%);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        box-shadow:
+            0 0 0 1px rgba(255, 255, 255, 0.02) inset,
+            0 30px 60px -30px rgba(0, 0, 0, 0.75);
+    }
+
+    /* Hairline accent across the card top */
+    .quiz-container::before {
+        content: '';
+        position: absolute;
+        top: -1px;
+        left: 24px;
+        right: 24px;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--accent-line), transparent);
+        pointer-events: none;
+    }
+
+    /* Two-column options on wider card */
+    .options {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    /* Don't push feedback to bottom inside a fit-to-content card */
+    .description {
+        margin-top: var(--md);
+    }
+
+    /* Slim scrollbar inside the card when content overflows */
+    .quiz-container::-webkit-scrollbar {
+        width: 6px;
+    }
+    .quiz-container::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .quiz-container::-webkit-scrollbar-thumb {
+        background: var(--line-2);
+        border-radius: 999px;
+    }
+    .quiz-container {
+        scrollbar-width: thin;
+        scrollbar-color: var(--line-2) transparent;
+    }
+}
+
+/* ============================================================
+   Reduced motion
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}

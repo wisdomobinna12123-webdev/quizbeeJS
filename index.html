@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+          integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+          crossorigin="anonymous" referrerpolicy="no-referrer">
+
+    <link rel="stylesheet" href="quiz.css">
+
+    <title>Quizbee — Quiz</title>
+</head>
+<body>
+
+    <main class="quiz-container">
+
+        <div class="quiz-header">
+
+            <h2>Quizbee</h2>
+            
+            
+            
+            <span class="points">
+                
+                <span class="score">0</span>
+                <p>pts</p> 
+            </span>
+            
+        </div>
+        
+        
+        <small class="range">Question <span class="id"></span> of 210</small>
+        
+        
+        <div class="questions">
+            
+            <h2 class="question"></h2>
+            
+            
+            <div class="options">
+                
+                <button class="option-btn"></button>
+                <button class="option-btn"></button>
+                <button class="option-btn"></button>
+                <button class="option-btn"></button>
+                
+                
+            </div>
+            
+        </div>
+        
+        
+        
+        <div class="navigation-btn">
+            <button class="prev">
+               <i class="fa-solid fa-arrow-left"></i> 
+               
+            </button>
+            
+            <button class="reset"><i class="fa-solid fa-arrow-rotate-left"></i> </button>
+            
+            <button class="next">
+            <i class="fa-solid fa-arrow-right"></i> 
+            </button>
+            
+        </div>
+        
+        
+        <div class="description">This is a description that gives the user feedback for answered questions.</div>
+
+    </main>
+    
+    
+    <!-- ============ Welcome Modal ============ -->
+<div class="welcome-modal" id="welcomeModal" hidden>
+
+    <div class="welcome-backdrop" data-close></div>
+
+    <div class="welcome-card" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle">
+
+        <button class="welcome-close" type="button" data-close aria-label="Close">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <span class="welcome-badge">
+            <span class="welcome-badge-dot"></span>
+            System Active
+        </span>
+
+        <h2 class="welcome-title" id="welcomeTitle">
+            Welcome to <span>Quizbee</span>
+        </h2>
+
+        <p class="welcome-text">
+            Sharpen your JavaScript knowledge with quick questions, instant feedback,
+            and live scoring as you go.
+        </p>
+
+        <ul class="welcome-list">
+            <li>
+                <span class="welcome-num">01</span>
+                Answer at your own pace
+            </li>
+            <li>
+                <span class="welcome-num">02</span>
+                Earn points for every correct answer
+            </li>
+            <li>
+                <span class="welcome-num">03</span>
+                Track your progress as you play
+            </li>
+        </ul>
+
+        <button class="welcome-cta" type="button" id="welcomeStart">
+            Start Quiz
+            <i class="fa-solid fa-arrow-right"></i>
+        </button>
+
+        <label class="welcome-skip">
+            <input type="checkbox" id="welcomeSkip">
+            <span class="welcome-check"></span>
+            Don't show this again
+        </label>
+
+    </div>
+
+</div>
+    
+<script src="questions.js" defer></script>
+</body>
+</html>
